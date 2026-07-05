@@ -29,7 +29,7 @@
   body {
     color: var(--text);
     font-family: "Noto Sans JP", "Hiragino Kaku Gothic ProN", "Yu Gothic", sans-serif;
-    padding-bottom: 40px;
+    padding-bottom: 96px;
     min-height: 100vh;
   }
   .num { font-family: "Bebas Neue", "Noto Sans JP", sans-serif; font-weight: 400; letter-spacing: .04em; }
@@ -118,6 +118,50 @@
   .score { flex: 0 0 auto; font-family: "Bebas Neue", sans-serif; font-size: 22px; letter-spacing: .06em; }
   .arena { margin-top: 8px; font-size: 12px; color: var(--sub); }
   .empty { text-align: center; color: var(--sub); padding: 60px 0; font-size: 14px; }
+  /* 画面切り替え */
+  .view { display: none; }
+  .view.active { display: block; }
+  .bottom-nav {
+    position: fixed; bottom: 0; left: 0; right: 0; z-index: 15;
+    display: flex;
+    background: rgba(13, 18, 32, .75);
+    backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+    border-top: 1px solid var(--line);
+    padding: 8px 0 calc(8px + env(safe-area-inset-bottom));
+  }
+  .nav-item {
+    flex: 1; text-align: center; color: var(--sub); font-size: 10px; font-weight: 700;
+    background: none; border: none; cursor: pointer; font-family: inherit;
+  }
+  .nav-item .ico { display: block; font-size: 21px; margin-bottom: 2px; filter: grayscale(1) opacity(.55); }
+  .nav-item.active { color: var(--accent); }
+  .nav-item.active .ico { filter: none; }
+  .section-title { font-size: 14px; font-weight: 900; margin: 18px 2px 10px; }
+  /* 代表戦カード */
+  .comp-label { font-size: 10px; color: var(--sub); letter-spacing: .04em; margin-bottom: 7px; }
+  .jdate { font-family: "Bebas Neue", sans-serif; font-size: 21px; line-height: 1; color: var(--accent); letter-spacing: .05em; }
+  .jdate small {
+    font-family: "Noto Sans JP", sans-serif; font-size: 10px; font-weight: 700;
+    color: var(--sub); margin-left: 7px; vertical-align: 2px;
+  }
+  .jmeta { margin-top: 8px; font-size: 12px; color: var(--sub); line-height: 1.7; }
+  .result-badge {
+    display: inline-block; font-size: 13px; font-weight: 900; letter-spacing: .04em;
+    background: rgba(80, 220, 140, .16); color: #7dedb0;
+    border-radius: 8px; padding: 2px 10px;
+  }
+  .today-badge {
+    display: inline-block; font-size: 11px; font-weight: 900;
+    background: linear-gradient(150deg, #ffc94d, #ff9d00); color: #1a1400;
+    border-radius: 8px; padding: 2px 8px; margin-left: 8px; vertical-align: 3px;
+  }
+  /* ニュース */
+  .news-item {
+    display: block; text-decoration: none; color: inherit;
+    padding: 13px 4px; border-bottom: 1px solid var(--line);
+  }
+  .news-title { font-size: 14px; font-weight: 700; line-height: 1.55; }
+  .news-meta { font-size: 11px; color: var(--sub); margin-top: 5px; }
   .modal-bg {
     display: none; position: fixed; inset: 0; background: rgba(0, 0, 0, .6); z-index: 20;
   }
@@ -179,12 +223,30 @@
   <nav class="date-bar" id="dateBar"></nav>
 </header>
 <main>
-  <div class="day-head" id="dayHead"></div>
-  <div id="gameList"><div class="empty">読み込み中…</div></div>
+  <section id="view-b" class="view active">
+    <div class="day-head" id="dayHead"></div>
+    <div id="gameList"><div class="empty">読み込み中…</div></div>
+  </section>
+  <section id="view-japan" class="view">
+    <div class="section-title">🇯🇵 男子日本代表</div>
+    <div id="japanList"><div class="empty">読み込み中…</div></div>
+    <div class="section-title">代表ニュース</div>
+    <div id="japanNews"></div>
+  </section>
+  <section id="view-news" class="view">
+    <div class="section-title">📰 Bリーグ ニュース</div>
+    <div id="newsList"><div class="empty">読み込み中…</div></div>
+  </section>
 </main>
+<nav class="bottom-nav">
+  <button class="nav-item active" data-view="b"><span class="ico">🏀</span>Bリーグ</button>
+  <button class="nav-item" data-view="japan"><span class="ico">🇯🇵</span>代表</button>
+  <button class="nav-item" data-view="news"><span class="ico">📰</span>ニュース</button>
+</nav>
 <footer>
   <span id="updatedAt"></span><br>
-  試合データはBリーグ公式サイトの情報を基にした非公式まとめです。<br>
+  試合データはBリーグ公式サイト・JBA発表の情報を基にした非公式まとめです。<br>
+  ニュース見出しはGoogleニュース経由で各媒体の記事にリンクしています。<br>
   最新・正確な情報は <a href="https://www.bleague.jp/schedule/" target="_blank">B.LEAGUE公式サイト</a> をご確認ください。
 </footer>
 
@@ -376,6 +438,89 @@ function renderClubGrid() {
 }
 function render() { renderDateBar(); renderGames(); }
 
+/* ---------- 代表・ニュース ---------- */
+let JAPAN = [], NEWS = { bleague: [], japan: [] };
+
+function timeAgo(iso) {
+  if (!iso) return '';
+  const min = Math.floor((Date.now() - new Date(iso).getTime()) / 60000);
+  if (min < 60) return `${Math.max(min, 1)}分前`;
+  if (min < 60 * 24) return `${Math.floor(min / 60)}時間前`;
+  return `${Math.floor(min / 60 / 24)}日前`;
+}
+
+function renderJapan() {
+  const list = document.getElementById('japanList');
+  list.innerHTML = '';
+  if (!JAPAN.length) {
+    list.innerHTML = '<div class="empty">試合予定は発表待ちです</div>';
+    return;
+  }
+  const t = todayStr();
+  // 未来の試合を上に、終わった試合は下に
+  const games = [...JAPAN].sort((a, b) => {
+    const ap = a.date >= t, bp = b.date >= t;
+    if (ap !== bp) return ap ? -1 : 1;
+    return ap ? a.date.localeCompare(b.date) : b.date.localeCompare(a.date);
+  });
+  for (const g of games) {
+    const f = fmtDate(g.date);
+    const isToday = g.date === t;
+    const a = document.createElement('a');
+    a.className = 'card' + (isToday ? ' fav' : '');
+    a.href = g.link || 'https://akatsukijapan.japanbasketball.jp/';
+    a.target = '_blank';
+    const haText = g.ha === 'AWAY' ? 'アウェー' : g.ha === 'HOME' ? 'ホーム' : '';
+    a.innerHTML = `
+      <div class="comp-label">${g.comp}</div>
+      <div class="top">
+        <span class="jdate">${f.m}/${f.d}<small>(${f.w}) ${g.time ? g.time + ' TIP OFF' : '時刻未定'}</small>${isToday ? '<span class="today-badge">今日</span>' : ''}</span>
+        ${g.result ? `<span class="result-badge">${g.result}</span>` : ''}
+      </div>
+      <div class="match">
+        <span class="team home">日本</span>
+        <span class="vs">vs</span>
+        <span class="team away">${g.opponent}</span>
+      </div>
+      <div class="jmeta">📍 ${g.venue}${haText ? `（${haText}）` : ''}${g.tv ? `<br>📺 ${g.tv}` : ''}</div>`;
+    list.appendChild(a);
+  }
+}
+
+function renderNewsList(el, items) {
+  el.innerHTML = '';
+  if (!items.length) {
+    el.innerHTML = '<div class="empty">ニュースを取得できませんでした</div>';
+    return;
+  }
+  for (const n of items) {
+    const a = document.createElement('a');
+    a.className = 'news-item';
+    a.href = n.link;
+    a.target = '_blank';
+    a.innerHTML = `
+      <div class="news-title">${n.title}</div>
+      <div class="news-meta">${n.source ?? ''}　${timeAgo(n.date)}</div>`;
+    el.appendChild(a);
+  }
+}
+
+function switchView(v) {
+  for (const btn of document.querySelectorAll('.nav-item')) {
+    btn.classList.toggle('active', btn.dataset.view === v);
+  }
+  for (const sec of document.querySelectorAll('.view')) {
+    sec.classList.toggle('active', sec.id === `view-${v}`);
+  }
+  // 日付タブと「今日」ボタンはBリーグ画面だけに表示
+  document.getElementById('dateBar').style.display = v === 'b' ? '' : 'none';
+  document.getElementById('todayBtn').style.display = v === 'b' ? '' : 'none';
+  window.scrollTo(0, 0);
+}
+for (const btn of document.querySelectorAll('.nav-item')) {
+  btn.onclick = () => switchView(btn.dataset.view);
+}
+
 /* ---------- ボタン・モーダル ---------- */
 document.getElementById('todayBtn').onclick = () => { current = pickDefaultDate(); render(); };
 document.getElementById('favBtn').onclick = () => {
@@ -401,6 +546,7 @@ for (const bg of document.querySelectorAll('.modal-bg')) {
 /* ---------- 起動 ---------- */
 applyBg();
 (async () => {
+  // Bリーグ日程
   try {
     const res = await fetch('games.json?t=' + Date.now());
     const data = await res.json();
@@ -418,6 +564,19 @@ applyBg();
     document.getElementById('gameList').innerHTML =
       '<div class="empty">データの読み込みに失敗しました。<br>通信環境をご確認ください。</div>';
   }
+  // 日本代表
+  try {
+    const res = await fetch('japan.json?t=' + Date.now());
+    JAPAN = (await res.json()).games ?? [];
+  } catch (e) { JAPAN = []; }
+  renderJapan();
+  // ニュース
+  try {
+    const res = await fetch('news.json?t=' + Date.now());
+    NEWS = await res.json();
+  } catch (e) { NEWS = { bleague: [], japan: [] }; }
+  renderNewsList(document.getElementById('newsList'), NEWS.bleague ?? []);
+  renderNewsList(document.getElementById('japanNews'), (NEWS.japan ?? []).slice(0, 8));
 })();
 </script>
 </body>

@@ -1,0 +1,50 @@
+{
+ "updated": "2026-07-06T00:00:00+09:00",
+ "note": "男子日本代表の試合。大会発表があり次第更新（時刻はすべて日本時間）",
+ "games": [
+  {
+   "date": "2026-07-03",
+   "time": "20:30",
+   "opponent": "中国",
+   "ha": "AWAY",
+   "comp": "FIBA W杯2027 アジア地区予選 Window3",
+   "venue": "中国・瀋陽",
+   "tv": "BS日テレ / DAZN / TVer",
+   "result": "○ 92-73",
+   "link": "https://fibaworldcup2027-asianqualifiers.japanbasketball.jp/"
+  },
+  {
+   "date": "2026-07-06",
+   "time": "19:30",
+   "opponent": "韓国",
+   "ha": "AWAY",
+   "comp": "FIBA W杯2027 アジア地区予選 Window3",
+   "venue": "韓国・高陽",
+   "tv": "BS朝日 / ABEMA / DAZN / TVer",
+   "result": null,
+   "link": "https://fibaworldcup2027-asianqualifiers.japanbasketball.jp/"
+  },
+  {
+   "date": "2026-08-27",
+   "time": "",
+   "opponent": "対戦相手 未定",
+   "ha": "",
+   "comp": "FIBA W杯2027 アジア地区予選 2次ラウンド Window4",
+   "venue": "組み合わせ発表待ち",
+   "tv": "",
+   "result": null,
+   "link": "https://fibaworldcup2027-asianqualifiers.japanbasketball.jp/"
+  },
+  {
+   "date": "2026-08-31",
+   "time": "",
+   "opponent": "対戦相手 未定",
+   "ha": "",
+   "comp": "FIBA W杯2027 アジア地区予選 2次ラウンド Window4",
+   "venue": "組み合わせ発表待ち",
+   "tv": "",
+   "result": null,
+   "link": "https://fibaworldcup2027-asianqualifiers.japanbasketball.jp/"
+  }
+ ]
+}
