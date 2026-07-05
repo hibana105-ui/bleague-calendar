@@ -155,13 +155,35 @@
     background: linear-gradient(150deg, #ffc94d, #ff9d00); color: #1a1400;
     border-radius: 8px; padding: 2px 8px; margin-left: 8px; vertical-align: 3px;
   }
-  /* ニュース */
+  /* ニュース（赤黒交互） */
   .news-item {
-    display: block; text-decoration: none; color: inherit;
-    padding: 13px 4px; border-bottom: 1px solid var(--line);
+    display: block; padding: 13px 14px; margin-bottom: 8px; border-radius: 14px;
+    backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
   }
-  .news-title { font-size: 14px; font-weight: 700; line-height: 1.55; }
+  .news-item:nth-of-type(odd) {
+    background: rgba(8, 10, 18, .55);
+    border-left: 4px solid rgba(255, 255, 255, .25);
+  }
+  .news-item:nth-of-type(even) {
+    background: linear-gradient(90deg, rgba(198, 15, 40, .30), rgba(198, 15, 40, .10));
+    border-left: 4px solid #c60f28;
+  }
+  .news-title {
+    display: block; text-decoration: none; color: inherit;
+    font-size: 14px; font-weight: 700; line-height: 1.55;
+  }
   .news-meta { font-size: 11px; color: var(--sub); margin-top: 5px; }
+  .rel-btn {
+    display: inline-block; margin-top: 8px; padding: 4px 10px; cursor: pointer;
+    background: rgba(255, 255, 255, .10); border: 1px solid var(--line); border-radius: 10px;
+    color: var(--text); font-size: 11px; font-weight: 700; font-family: inherit;
+  }
+  .rel-list { margin-top: 8px; border-top: 1px dashed var(--line); padding-top: 4px; }
+  .rel-link {
+    display: block; text-decoration: none; color: var(--sub);
+    font-size: 12px; line-height: 1.5; padding: 6px 2px;
+  }
+  .rel-link b { color: var(--text); font-weight: 700; }
   .modal-bg {
     display: none; position: fixed; inset: 0; background: rgba(0, 0, 0, .6); z-index: 20;
   }
@@ -494,14 +516,27 @@ function renderNewsList(el, items) {
     return;
   }
   for (const n of items) {
-    const a = document.createElement('a');
-    a.className = 'news-item';
-    a.href = n.link;
-    a.target = '_blank';
-    a.innerHTML = `
-      <div class="news-title">${n.title}</div>
-      <div class="news-meta">${n.source ?? ''}　${timeAgo(n.date)}</div>`;
-    el.appendChild(a);
+    const item = document.createElement('div');
+    item.className = 'news-item';
+    const rel = n.related ?? [];
+    item.innerHTML = `
+      <a class="news-title" href="${n.link}" target="_blank">${n.title}</a>
+      <div class="news-meta">${n.source ?? ''}　${timeAgo(n.date)}</div>
+      ${rel.length ? `
+        <button class="rel-btn">同じ話題 +${rel.length}件 ▾</button>
+        <div class="rel-list" style="display:none">
+          ${rel.map((r) => `<a class="rel-link" href="${r.link}" target="_blank"><b>${r.source || '記事'}</b>｜${r.title}</a>`).join('')}
+        </div>` : ''}`;
+    const btn = item.querySelector('.rel-btn');
+    if (btn) {
+      btn.onclick = () => {
+        const list = item.querySelector('.rel-list');
+        const isOpen = list.style.display !== 'none';
+        list.style.display = isOpen ? 'none' : '';
+        btn.textContent = `同じ話題 +${rel.length}件 ${isOpen ? '▾' : '▴'}`;
+      };
+    }
+    el.appendChild(item);
   }
 }
 
@@ -545,11 +580,23 @@ for (const bg of document.querySelectorAll('.modal-bg')) {
 
 /* ---------- 起動 ---------- */
 applyBg();
+// 回線不調でも数回リトライして読み込む
+async function fetchJson(url, tries = 3) {
+  for (let i = 0; i < tries; i++) {
+    try {
+      const res = await fetch(`${url}?t=${Date.now()}`);
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      return await res.json();
+    } catch (e) {
+      if (i === tries - 1) throw e;
+      await new Promise((r) => setTimeout(r, 400 * (i + 1)));
+    }
+  }
+}
 (async () => {
   // Bリーグ日程
   try {
-    const res = await fetch('games.json?t=' + Date.now());
-    const data = await res.json();
+    const data = await fetchJson('games.json');
     GAMES = data.games ?? data;
     dates = [...new Set(GAMES.map((g) => g.date))].sort();
     clubs = [...new Set(GAMES.flatMap((g) => [g.home, g.away]))].sort((a, b) => a.localeCompare(b, 'ja'));
@@ -566,14 +613,12 @@ applyBg();
   }
   // 日本代表
   try {
-    const res = await fetch('japan.json?t=' + Date.now());
-    JAPAN = (await res.json()).games ?? [];
+    JAPAN = (await fetchJson('japan.json')).games ?? [];
   } catch (e) { JAPAN = []; }
   renderJapan();
   // ニュース
   try {
-    const res = await fetch('news.json?t=' + Date.now());
-    NEWS = await res.json();
+    NEWS = await fetchJson('news.json');
   } catch (e) { NEWS = { bleague: [], japan: [] }; }
   renderNewsList(document.getElementById('newsList'), NEWS.bleague ?? []);
   renderNewsList(document.getElementById('japanNews'), (NEWS.japan ?? []).slice(0, 8));

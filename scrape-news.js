@@ -7,7 +7,7 @@ const FEEDS = {
   bleague: 'https://news.google.com/rss/search?q=B%E3%83%AA%E3%83%BC%E3%82%B0%20%E3%83%90%E3%82%B9%E3%82%B1&hl=ja&gl=JP&ceid=JP:ja',
   japan: 'https://news.google.com/rss/search?q=%E3%83%90%E3%82%B9%E3%82%B1%20%E6%97%A5%E6%9C%AC%E4%BB%A3%E8%A1%A8&hl=ja&gl=JP&ceid=JP:ja',
 };
-const MAX_ITEMS = 20;
+const MAX_ITEMS = 20; // まとめ（クラスタ）後の件数
 
 function decodeEntities(s) {
   return s
@@ -35,7 +35,35 @@ function parseRss(xml) {
   }
   // 新しい順に並べて上位だけ
   items.sort((a, b) => (b.date ?? '').localeCompare(a.date ?? ''));
-  return items.slice(0, MAX_ITEMS);
+  return clusterItems(items).slice(0, MAX_ITEMS);
+}
+
+// ---- 同じ話題の見出しをまとめる ----
+function bigrams(s) {
+  const norm = s.toLowerCase().replace(/[\s、。「」『』【】｜|・…!?！？\-–—:：;()（）\d]/g, '');
+  const set = new Set();
+  for (let i = 0; i < norm.length - 1; i++) set.add(norm.slice(i, i + 2));
+  return set;
+}
+// 片方がもう片方をほぼ含んでいれば同じ話題とみなす（containment類似度）
+function similar(a, b) {
+  if (!a.size || !b.size) return 0;
+  let hit = 0;
+  for (const g of a) if (b.has(g)) hit++;
+  return hit / Math.min(a.size, b.size);
+}
+function clusterItems(items) {
+  const clusters = [];
+  for (const item of items) {
+    const grams = bigrams(item.title);
+    const home = clusters.find((c) => similar(c.grams, grams) >= 0.6);
+    if (home) {
+      home.related.push({ title: item.title, source: item.source, link: item.link });
+    } else {
+      clusters.push({ ...item, grams, related: [] });
+    }
+  }
+  return clusters.map(({ grams, ...c }) => c);
 }
 
 (async () => {
