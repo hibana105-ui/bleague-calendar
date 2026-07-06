@@ -185,6 +185,7 @@
     background: #000; color: #fff; border-radius: 6px;
     width: 20px; height: 20px; display: inline-flex; align-items: center; justify-content: center;
   }
+  .x-chip-fav { border-color: var(--accent); background: rgba(255, 182, 30, .16); }
   .modal-bg {
     display: none; position: fixed; inset: 0; background: rgba(0, 0, 0, .6); z-index: 20;
   }
@@ -261,7 +262,7 @@
     </a>
   </section>
   <section id="view-news" class="view">
-    <div class="section-title">公式X（タップでXアプリが開きます）</div>
+    <div class="section-title">公式X（タップでXが開きます・横スクロールで全クラブ）</div>
     <div class="x-chips" id="xChips"></div>
     <div class="section-title">📰 最新ニュースを読む</div>
     <p class="news-desc">タップすると各ニュースサイトの検索結果が開きます。気になる記事は各媒体でご覧ください。</p>
@@ -523,24 +524,20 @@ function renderXChips() {
     a.innerHTML = `<span class="xmark">𝕏</span>${o.label}`;
     box.appendChild(a);
   }
-  for (const c of favs) {
+  // 全クラブを表示（推しクラブを先頭に⭐付きで、残りは北→南の順）
+  const allClubs = Object.keys(CLUB_X_HANDLE);
+  const ordered = [
+    ...favs.filter((c) => allClubs.includes(c)),
+    ...allClubs.filter((c) => !favs.includes(c)),
+  ];
+  for (const c of ordered) {
+    const isFav = favs.includes(c);
     const a = document.createElement('a');
-    a.className = 'x-chip';
+    a.className = 'x-chip' + (isFav ? ' x-chip-fav' : '');
     a.href = clubXUrl(c);
     a.target = '_blank';
-    a.innerHTML = `<span class="xmark">𝕏</span>⭐ ${c}`;
+    a.innerHTML = `<span class="xmark">𝕏</span>${isFav ? '⭐ ' : ''}${c}`;
     box.appendChild(a);
-  }
-  // 推し未設定のときの案内チップ
-  if (!favs.length) {
-    const b = document.createElement('button');
-    b.className = 'x-chip';
-    b.innerHTML = '⭐ 推しクラブを選ぶとここに並びます';
-    b.onclick = () => {
-      renderClubGrid();
-      document.getElementById('favModalBg').classList.add('open');
-    };
-    box.appendChild(b);
   }
 }
 
