@@ -1,5 +1,5 @@
 {
- "updated": "2026-07-13T23:43:36.205Z",
+ "updated": "2026-07-14T23:43:24.076Z",
  "count": 780,
  "games": [
   {
@@ -295,7 +295,7 @@
    "id": "506412",
    "home": "富山",
    "away": "宇都宮",
-   "arena": "| APアリ",
+   "arena": "富山県 | APアリ",
    "time": "14:05",
    "score": null
   },
@@ -403,7 +403,7 @@
    "id": "506424",
    "home": "富山",
    "away": "宇都宮",
-   "arena": "| APアリ",
+   "arena": "富山県 | APアリ",
    "time": "14:05",
    "score": null
   },
@@ -493,7 +493,7 @@
    "id": "506433",
    "home": "富山",
    "away": "京都",
-   "arena": "| APアリ",
+   "arena": "富山県 | APアリ",
    "time": "19:05",
    "score": null
   },
@@ -853,7 +853,7 @@
    "id": "506475",
    "home": "富山",
    "away": "三河",
-   "arena": "| APアリ",
+   "arena": "富山県 | APアリ",
    "time": "14:05",
    "score": null
   },
@@ -1096,7 +1096,7 @@
    "id": "506505",
    "home": "富山",
    "away": "島根",
-   "arena": "| APアリ",
+   "arena": "富山県 | APアリ",
    "time": "14:05",
    "score": null
   },
@@ -1213,7 +1213,7 @@
    "id": "506513",
    "home": "富山",
    "away": "茨城",
-   "arena": "| APアリ",
+   "arena": "富山県 | APアリ",
    "time": "19:05",
    "score": null
   },
@@ -1555,7 +1555,7 @@
    "id": "506554",
    "home": "富山",
    "away": "名古屋D",
-   "arena": "| APアリ",
+   "arena": "富山県 | APアリ",
    "time": "14:05",
    "score": null
   },
@@ -1780,7 +1780,7 @@
    "id": "506576",
    "home": "富山",
    "away": "大阪",
-   "arena": "| APアリ",
+   "arena": "富山県 | APアリ",
    "time": "19:05",
    "score": null
   },
@@ -2194,7 +2194,7 @@
    "id": "506624",
    "home": "富山",
    "away": "川崎",
-   "arena": "| APアリ",
+   "arena": "富山県 | APアリ",
    "time": "14:05",
    "score": null
   },
@@ -2356,7 +2356,7 @@
    "id": "506642",
    "home": "富山",
    "away": "横浜BC",
-   "arena": "| APアリ",
+   "arena": "富山県 | APアリ",
    "time": "14:05",
    "score": null
   },
@@ -2446,7 +2446,7 @@
    "id": "506651",
    "home": "富山",
    "away": "横浜BC",
-   "arena": "| APアリ",
+   "arena": "富山県 | APアリ",
    "time": "14:05",
    "score": null
   },
@@ -2644,7 +2644,7 @@
    "id": "506673",
    "home": "富山",
    "away": "長崎",
-   "arena": "| APアリ",
+   "arena": "富山県 | APアリ",
    "time": "19:05",
    "score": null
   },
@@ -2797,7 +2797,7 @@
    "id": "506691",
    "home": "富山",
    "away": "長崎",
-   "arena": "| APアリ",
+   "arena": "富山県 | APアリ",
    "time": "14:05",
    "score": null
   },
@@ -3148,7 +3148,7 @@
    "id": "506723",
    "home": "富山",
    "away": "三遠",
-   "arena": "| APアリ",
+   "arena": "富山県 | APアリ",
    "time": "19:05",
    "score": null
   },
@@ -3220,7 +3220,7 @@
    "id": "506737",
    "home": "富山",
    "away": "東京SR",
-   "arena": "| APアリ",
+   "arena": "富山県 | APアリ",
    "time": "14:05",
    "score": null
   },
@@ -3310,7 +3310,7 @@
    "id": "506748",
    "home": "富山",
    "away": "東京SR",
-   "arena": "| APアリ",
+   "arena": "富山県 | APアリ",
    "time": "14:05",
    "score": null
   },
@@ -3427,7 +3427,7 @@
    "id": "506759",
    "home": "富山",
    "away": "佐賀",
-   "arena": "| APアリ",
+   "arena": "富山県 | APアリ",
    "time": "",
    "score": null
   },
@@ -3985,7 +3985,7 @@
    "id": "506821",
    "home": "富山",
    "away": "神戸",
-   "arena": "| APアリ",
+   "arena": "富山県 | APアリ",
    "time": "",
    "score": null
   },
@@ -4552,7 +4552,7 @@
    "id": "506884",
    "home": "富山",
    "away": "秋田",
-   "arena": "| APアリ",
+   "arena": "富山県 | APアリ",
    "time": "",
    "score": null
   },
@@ -4723,7 +4723,7 @@
    "id": "506903",
    "home": "富山",
    "away": "北海道",
-   "arena": "| APアリ",
+   "arena": "富山県 | APアリ",
    "time": "",
    "score": null
   },
@@ -4876,7 +4876,7 @@
    "id": "506920",
    "home": "富山",
    "away": "北海道",
-   "arena": "| APアリ",
+   "arena": "富山県 | APアリ",
    "time": "",
    "score": null
   },
@@ -5425,7 +5425,7 @@
    "id": "506981",
    "home": "富山",
    "away": "A千葉",
-   "arena": "| APアリ",
+   "arena": "富山県 | APアリ",
    "time": "",
    "score": null
   },
@@ -5524,7 +5524,7 @@
    "id": "506991",
    "home": "富山",
    "away": "A千葉",
-   "arena": "| APアリ",
+   "arena": "富山県 | APアリ",
    "time": "",
    "score": null
   },
@@ -5605,7 +5605,7 @@
    "id": "507001",
    "home": "富山",
    "away": "琉球",
-   "arena": "| APアリ",
+   "arena": "富山県 | APアリ",
    "time": "",
    "score": null
   },
@@ -5677,7 +5677,7 @@
    "id": "507009",
    "home": "富山",
    "away": "仙台",
-   "arena": "| APアリ",
+   "arena": "富山県 | APアリ",
    "time": "",
    "score": null
   },
@@ -5893,7 +5893,7 @@
    "id": "507033",
    "home": "滋賀",
    "away": "三遠",
-   "arena": "| 滋賀DH",
+   "arena": "滋賀県 | 滋賀DH",
    "time": "",
    "score": null
   },
@@ -5911,7 +5911,7 @@
    "id": "507035",
    "home": "富山",
    "away": "群馬",
-   "arena": "| APアリ",
+   "arena": "富山県 | APアリ",
    "time": "",
    "score": null
   },
@@ -5974,7 +5974,7 @@
    "id": "507042",
    "home": "滋賀",
    "away": "名古屋D",
-   "arena": "| 滋賀DH",
+   "arena": "滋賀県 | 滋賀DH",
    "time": "",
    "score": null
   },
@@ -6019,7 +6019,7 @@
    "id": "507047",
    "home": "富山",
    "away": "千葉J",
-   "arena": "| APアリ",
+   "arena": "富山県 | APアリ",
    "time": "",
    "score": null
   },
@@ -6154,7 +6154,7 @@
    "id": "507061",
    "home": "滋賀",
    "away": "島根",
-   "arena": "| 滋賀DH",
+   "arena": "滋賀県 | 滋賀DH",
    "time": "",
    "score": null
   },
@@ -6262,7 +6262,7 @@
    "id": "507073",
    "home": "滋賀",
    "away": "島根",
-   "arena": "| 滋賀DH",
+   "arena": "滋賀県 | 滋賀DH",
    "time": "",
    "score": null
   },
@@ -6433,7 +6433,7 @@
    "id": "507093",
    "home": "富山",
    "away": "名古屋D",
-   "arena": "| APアリ",
+   "arena": "富山県 | APアリ",
    "time": "",
    "score": null
   },
@@ -6577,7 +6577,7 @@
    "id": "507109",
    "home": "富山",
    "away": "A東京",
-   "arena": "| APアリ",
+   "arena": "富山県 | APアリ",
    "time": "",
    "score": null
   },
@@ -6604,7 +6604,7 @@
    "id": "507112",
    "home": "滋賀",
    "away": "北海道",
-   "arena": "| 滋賀DH",
+   "arena": "滋賀県 | 滋賀DH",
    "time": "",
    "score": null
   },
@@ -6685,7 +6685,7 @@
    "id": "507120",
    "home": "富山",
    "away": "A東京",
-   "arena": "| APアリ",
+   "arena": "富山県 | APアリ",
    "time": "",
    "score": null
   },
@@ -6712,7 +6712,7 @@
    "id": "507123",
    "home": "滋賀",
    "away": "北海道",
-   "arena": "| 滋賀DH",
+   "arena": "滋賀県 | 滋賀DH",
    "time": "",
    "score": null
   },
